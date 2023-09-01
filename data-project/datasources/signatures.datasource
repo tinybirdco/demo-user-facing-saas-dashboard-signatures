@@ -1,0 +1,15 @@
+
+SCHEMA >
+    `account_id` Int32 `json:$.account_id`,
+    `created_on` Date `json:$.created_on`,
+    `signatureType` String `json:$.signatureType`,
+    `signature_id` String `json:$.signature_id`,
+    `since` Date `json:$.since`,
+    `status` String `json:$.status`,
+    `timestamp` Int64 `json:$.timestamp`,
+    `until` Date `json:$.until`,
+    `uuid` String `json:$.uuid`
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYear(created_on)"
+ENGINE_SORTING_KEY "created_on, status, timestamp, uuid"

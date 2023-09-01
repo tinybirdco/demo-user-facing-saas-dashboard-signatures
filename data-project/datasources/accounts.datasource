@@ -1,0 +1,18 @@
+
+SCHEMA >
+    `account_id` Int32 `json:$.account_id`,
+    `certified_SMS` UInt8 `json:$.certified_SMS`,
+    `certified_email` UInt8 `json:$.certified_email`,
+    `created_on` Date `json:$.created_on`,
+    `email` String `json:$.email`,
+    `organization` String `json:$.organization`,
+    `person` String `json:$.person`,
+    `phone` String `json:$.phone`,
+    `photo_id_certified` UInt8 `json:$.photo_id_certified`,
+    `role` String `json:$.role`,
+    `status` String `json:$.status`,
+    `timestamp` Int64 `json:$.timestamp`
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYear(created_on)"
+ENGINE_SORTING_KEY "created_on, role, status, timestamp"
