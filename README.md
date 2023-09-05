@@ -67,8 +67,7 @@ This repo has two `.datasource` files representing Tinybird [Data Sources](https
 To deploy your real-time data pipelines, push the resources in your repository to the Tinybird server:
 
 ```bash
-cd data-project
-tb push datasources/ pipes/
+tb push data-project/
 ```
 
 ### Stream mock data to Tinybird
