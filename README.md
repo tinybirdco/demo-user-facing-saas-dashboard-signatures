@@ -49,12 +49,6 @@ Authenticating will create a `.tinyb` file in your project directory.
 
 ⚠️Warning! The `.tinyb` contains your User Admin token. Don't share it or publish it in your application. For more detailed information on Token management in Tinybird, read [the docs](https://www.tinybird.co/docs/api-reference/token-api.html).
 
-Add your `.tinyb` file to your `.gitignore`:
-
-```bash
-echo ".tinyb" >> .gitignore
-```
-
 ### Create environment variables for local dev
 
 You need to copy your Tinybird host and token to the `.env` file in your directory:
