@@ -64,7 +64,20 @@ NEXT_PUBLIC_TINYBIRD_HOST=your_tinybird_host # (e.g. api.tinybird.co)
 NEXT_PUBLIC_TINYBIRD_TOKEN=your_tinybird_token
 ```
 
-## Stream data to Tinybird
+## Set up data pipelines in Tinybird
+
+### Push Data Sources and Pipes to Tinybird server
+
+This repo has two `.datasource` files representing Tinybird [Data Sources](https://www.tinybird.co/docs/concepts/data-sources.html) and four `.pipe` files representing Tinybird [Pipes](https://www.tinybird.co/docs/concepts/pipes.html). The Data Sources will hold data that gets ingested into Tinybird, and the Pipes define the way that data gets transformed and exposed as APIs in real-time. For more information on Data Sources and Pipes, click those links above.
+
+To deploy your real-time data pipelines, push the resources in your repository to the Tinybird server:
+
+```bash
+cd data-project
+tb push datasources/ pipes/
+```
+
+### Stream mock data to Tinybird
 
 This repository includes a data generating script called `mockDataGenerator.js` that creates mock data and sends it to Tinybird via the [Tinybird Events API](https://www.tinybird.co/docs/ingest/events-api.html).
 
