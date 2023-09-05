@@ -30,8 +30,6 @@ const PercentageActiveUsersVerified = ({host, token, date_from, date_to}) => {
                 index="status"
                 category="count"
                 colors={["green", "red"]}
-                yAxisWidth={48}
-                showXAxis={true}
             />
             <Text>Latency: {latency*1000} ms</Text>
          </Card>
