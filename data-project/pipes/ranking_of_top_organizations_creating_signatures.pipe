@@ -13,7 +13,7 @@ SQL >
       {% end %}
     FROM signatures
     WHERE
-        created_on
+        fromUnixTimestamp64Milli(timestamp)
         BETWEEN {{
             Date(
                 date_from,
@@ -33,7 +33,6 @@ SQL >
     GROUP BY account_id
     HAVING total > 0
     ORDER BY total DESC
-
 
 
 
