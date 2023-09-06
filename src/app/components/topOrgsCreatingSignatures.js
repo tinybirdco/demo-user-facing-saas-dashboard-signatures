@@ -1,6 +1,6 @@
 "use client";
 
-import {Card, Title, Subtitle, BarChart, Text} from '@tremor/react';
+import { Card, Title, Subtitle, BarChart, Text } from '@tremor/react';
 import React, { useState, useEffect } from 'react';
 import { fetchTinybirdUrl, topOrgsCreatingSignaturesURL } from '../services/tinybirdAPIs'
 
