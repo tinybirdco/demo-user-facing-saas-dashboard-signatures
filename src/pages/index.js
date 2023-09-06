@@ -1,6 +1,7 @@
 "use client";
-import {useState} from 'react';
-import {Title, Subtitle, Flex, DateRangePicker, DateRangePickerItem} from '@tremor/react';
+
+import { useState } from 'react';
+import { Title, Subtitle, Flex, DateRangePicker, DateRangePickerItem } from '@tremor/react';
 import TopOrgsCreatingSignatures from '@/app/components/topOrgsCreatingSignatures.js';
 import TotalActivitiesPerHour from '@/app/components/totalActivitiesPerHour';
 import ActivitiesByStatus from '@/app/components/activitiesByStatus';
