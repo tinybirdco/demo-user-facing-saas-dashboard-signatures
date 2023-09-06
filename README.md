@@ -51,7 +51,7 @@ Authenticating will create a `.tinyb` file in your project directory.
 
 ### Create environment variables for local dev
 
-You need to copy your Tinybird host and token to the `.env` file in your directory:
+You need to copy your Tinybird host and token to the `.env.local` file in your directory:
 
 ```bash
 NEXT_PUBLIC_TINYBIRD_HOST=your_tinybird_host # (e.g. api.tinybird.co)
@@ -72,7 +72,7 @@ tb push data-project/
 
 ### Stream mock data to Tinybird
 
-This repository includes a data generating script called `mockDataGenerator.js` that creates mock data and sends it to Tinybird via the [Tinybird Events API](https://www.tinybird.co/docs/ingest/events-api.html).
+This repository includes a data-generating script called `mockDataGenerator.js` that creates mock data and sends it to Tinybird via the [Tinybird Events API](https://www.tinybird.co/docs/ingest/events-api.html).
 
 To send mock data to Tinybird, use the `seed` script:
 
