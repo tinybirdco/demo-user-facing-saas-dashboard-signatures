@@ -1,6 +1,6 @@
 "use client";
 
-import {Card, Title, Subtitle, BarList, Text, Flex} from '@tremor/react';
+import { Card, Title, Subtitle, BarList, Text, Flex } from '@tremor/react';
 import React, { useState, useEffect } from 'react';
 import { fetchTinybirdUrl, activitiesByStatusURL } from '../services/tinybirdAPIs';
 
