@@ -4,13 +4,11 @@ NODE retrieve_signatures
 SQL >
 
     %
-    SELECT 
-      account_id,
-      {% if defined(completed) %}
-        countIf(status = 'completed') total
-      {% else %}
-        count() total
-      {% end %}
+    SELECT
+        account_id,
+        {% if defined(completed) %} countIf(status = 'completed') total
+        {% else %} count() total
+        {% end %}
     FROM signatures
     WHERE
         fromUnixTimestamp64Milli(timestamp)
@@ -22,31 +20,18 @@ SQL >
                 required=True,
             )
         }}
-        AND {{
-    Date(
-      date_to,
-      '2024-01-01',
-      description="End date",
-      required=True
-    ) 
-      }}
+        AND {{ Date(date_to, '2024-01-01', description="End date", required=True) }}
     GROUP BY account_id
     HAVING total > 0
     ORDER BY total DESC
-
-
 
 NODE endpoint
 SQL >
 
     %
-    SELECT
-      organization,
-      sum(total) AS org_total
+    SELECT organization, sum(total) AS org_total
     FROM retrieve_signatures
     LEFT JOIN accounts ON accounts.account_id = retrieve_signatures.account_id
     GROUP BY organization
     ORDER BY org_total DESC
-    LIMIT {{Int8(limit, 10, description="The number of rows accounts to retrieve", required=False)}}
-
-
+    LIMIT {{ Int8(limit, 10, description="The number of rows accounts to retrieve", required=False) }}
