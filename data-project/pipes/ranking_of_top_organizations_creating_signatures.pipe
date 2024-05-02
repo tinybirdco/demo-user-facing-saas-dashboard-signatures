@@ -25,11 +25,11 @@ SQL >
         AND {{
     Date(
       date_to,
-        '2024-01-01',
-        description="End date",
-        required=True
+      '2024-01-01',
+      description="End date",
+      required=True
     ) 
-          }}
+      }}
     GROUP BY account_id
     HAVING total > 0
     ORDER BY total DESC
