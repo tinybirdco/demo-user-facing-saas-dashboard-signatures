@@ -51,6 +51,11 @@ Authenticating will create a `.tinyb` file in your project directory.
 
 ### Create environment variables for local dev
 
+First create a new file `.env.local`
+```bash
+cp .env.example .env.local
+```
+
 You need to copy your Tinybird host and token to the `.env.local` file in your directory:
 
 ```bash

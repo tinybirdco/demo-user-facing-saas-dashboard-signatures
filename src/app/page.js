@@ -1,74 +1,88 @@
 "use client";
 
-import { Card, Text, Subtitle, Title, BarChart } from '@tremor/react';
-import React, { useState, useEffect } from 'react';
+import { BarChart, Card, Subtitle, Text, Title } from "@tremor/react";
+import React from "react";
+import useSWR from "swr";
 
 // Get your Tinybird host and token from the .env file
 const TINYBIRD_HOST = process.env.NEXT_PUBLIC_TINYBIRD_HOST; // The host URL for the Tinybird API
 const TINYBIRD_TOKEN = process.env.NEXT_PUBLIC_TINYBIRD_TOKEN; // The access token for authentication with the Tinybird API
 
+const REFRESH_INTERVAL_IN_MILLISECONDS = 5000; // five seconds
+
 export default function Dashboard() {
-    // React state hook for managing the "newSignaturesPerDay" data
-    // Initializes data with an array containing an object with default values for the top orgs creating signatures
-    const [ranking_of_top_organizations_creating_signatures, setData] = useState([{
-        "organization": "",
-        "org_total": 0,
-    }]);
-   
-    // Initializes latency with an integer 0  
-    const [latency, setLatency] = useState(0);
+  // Define date range for the query
+  const today = new Date(); // Get today's date
+  const dateFrom = new Date(today.setMonth(today.getMonth() - 1)); // Start the query's dateFrom to the one month before today
+  const dateTo = new Date(today.setMonth(today.getMonth() + 1)); // Set the query's dateTo to be one month from today
 
-    // Define hardcoded date range for the query
-const today = new Date(); // Get today's date
-const dateFrom = new Date(today.setMonth(today.getMonth()-1)); // Start the query's dateFrom to the one month before today
-const dateTo = new Date(today.setMonth(today.getMonth()+1)); // Set the query's dateTo to be one month from today
+  // Format for passing as a query parameter
+  const dateFromFormatted = dateFrom.toISOString().substring(0, 10);
+  const dateToFormatted = dateTo.toISOString().substring(0, 10);
 
-console.log({dateFrom})
-console.log({dateTo})
-console.log({today})
+  // Constructing the URL for fetching data, including host, token, and date range
+  const endpointUrl = new URL(
+    "/v0/pipes/ranking_of_top_organizations_creating_signatures.json",
+    TINYBIRD_HOST
+  );
+  endpointUrl.searchParams.set("token", TINYBIRD_TOKEN);
+  endpointUrl.searchParams.set("date_from", dateFromFormatted);
+  endpointUrl.searchParams.set("date_to", dateToFormatted);
 
-// Format for passing as a query parameter
-const dateFromFormatted = dateFrom.toISOString().substring(0, 10);
-const dateToFormatted = dateTo.toISOString().substring(0, 10);
+  // Initializes variables for storing data
+  let ranking_of_top_organizations_creating_signatures, latency, errorMessage;
 
-// Constructing the URL for fetching data, including host, token, and date range
-const topRankingOfOrganizationsCreatingSignaturesURL = `https://${TINYBIRD_HOST}/v0/pipes/ranking_of_top_organizations_creating_signatures.json?token=${TINYBIRD_TOKEN}&date_from=${dateFromFormatted}&date_to=${dateToFormatted}`;
+  try {
+    // Function to fetch data from Tinybird URL and parse JSON response
+    const fetcher = (url) => fetch(url).then((r) => r.json());
 
-// Function to fetch data from Tinybird URL
-const fetchTinybirdUrl = async (fetchUrl, setData, setLatency) => {
-        console.log({fetchUrl})
-        const data = await fetch(fetchUrl); // Performing an asynchronous HTTP fetch request
-        const jsonData = await data.json(); // Parsing the response as JSON
-        console.log(jsonData.data); // Logging the parsed data for debugging purposes
-        console.log(jsonData.statistics.elapsed)
-        setData(jsonData.data); // Setting the state with the fetched data
-        setLatency(jsonData.statistics.elapsed) // Setting the state with the query latency from Tinybird
-};
+    // Using SWR hook to handle state and refresh result every five seconds
+    const { data, error } = useSWR(endpointUrl.toString(), fetcher, {
+      refreshInterval: REFRESH_INTERVAL_IN_MILLISECONDS,
+    });
 
-// useEffect hook to handle side-effects (in this case, fetching data) in a functional component
-useEffect(() => {
-    // Calling the fetchTinybirdUrl function with the URL and state setter function
-    // The function fetches the data and updates the state
-    fetchTinybirdUrl(topRankingOfOrganizationsCreatingSignaturesURL, setData, setLatency)
-  }, [topRankingOfOrganizationsCreatingSignaturesURL]); // The effect will rerun if the value of topRankingOfOrganizationsCreatingSignaturesURL changes
+    if (error) {
+      errorMessage = error;
+      return;
+    }
+    if (!data) return;
 
+    if (data?.error) {
+      errorMessage = data.error;
+      return;
+    }
+
+    ranking_of_top_organizations_creating_signatures = data.data; // Setting the state with the fetched data
+    latency = data.statistics?.elapsed; // Setting the state with the query latency from Tinybird
+  } catch (e) {
+    console.error(e);
+    errorMessage = e;
+  }
 
   return (
     <Card>
-            <Title>Top Organizations Creating Signatures</Title>
-            <Subtitle>
-                Ranked from highest to lowest
-            </Subtitle>
-            <BarChart
-                className="mt-6"
-                data={ranking_of_top_organizations_creating_signatures}
-                index="organization"
-                categories={["org_total"]}
-                colors={["blue", "red"]}
-                yAxisWidth={48}
-                showXAxis={true}
-            />
-            <Text>Latency: {latency*1000} ms</Text>
-        </Card>
-);
+      <Title>Top Organizations Creating Signatures</Title>
+      <Subtitle>Ranked from highest to lowest</Subtitle>
+      {ranking_of_top_organizations_creating_signatures && (
+        <BarChart
+          className="mt-6"
+          data={ranking_of_top_organizations_creating_signatures}
+          index="organization"
+          categories={["org_total"]}
+          colors={["blue", "red"]}
+          yAxisWidth={48}
+          showXAxis={true}
+        />
+      )}
+      {latency && <Text>Latency: {latency * 1000} ms</Text>}
+      {errorMessage && (
+        <div className="mt-4 text-red-600">
+          <p>
+            Oops, something happens: <strong>{errorMessage}</strong>
+          </p>
+          <p className="text-sm">Check your console for more information</p>
+        </div>
+      )}
+    </Card>
+  );
 }
