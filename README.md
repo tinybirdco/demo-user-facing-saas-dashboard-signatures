@@ -37,8 +37,8 @@ npm install
 Next, install the Tinybird CLI. This will be needed for local authentication to send mock data to your Tinybird Data Source (or if you'd like to use the CLI to work on your Tinybird resources locally):
 
 ```bash
-python -mvenv .e
-. .e/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 pip install tinybird-cli
 tb auth
 ```
