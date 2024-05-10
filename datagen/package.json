@@ -1,0 +1,15 @@
+{
+  "name": "@tinybirdco/demo-user-facing-analytics-signatures-datagen",
+  "version": "1.0.0",
+  "description": "This folder contains code to generate data for this demo.",
+  "main": "mockDataGenerator.js",
+  "type": "module",
+  "scripts": {
+    "seed": "node ./mockDataGenerator.js"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^8.4.1"
+  },
+  "license": "MIT",
+  "author": "Tinybird team"
+}

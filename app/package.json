@@ -1,14 +1,11 @@
 {
-  "name": "signatures-dashboard",
+  "name": "@tinybirdco/demo-user-facing-analytics-signatures-dashboard",
   "version": "0.1.0",
-  "private": true,
-  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "seed": "node data-project/mockDataGenerator.js"
+    "lint": "next lint"
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
@@ -26,5 +23,7 @@
     "eslint-config-next": "14.2.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1"
-  }
+  },
+  "license": "MIT",
+  "author": "Tinybird team"
 }

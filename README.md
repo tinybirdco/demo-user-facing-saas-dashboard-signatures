@@ -1,93 +1,105 @@
+# Build real-time analytics dashboard using Tinybird
+
 This repo contains all the resources you need to build a real-time analytics dashboard using Tinybird, Tremor, and Next.js. The dashboard created here is based on a signature tracking app (e.g. DocuSign) use case, and provides real-time analytics on user activity and signature metrics.
 
-For a complete tutorial on how to build a real-time dashboard from scratch, read the accompanying Tinybird blog post [here](https://www.tinybird.co/blog-posts/real-time-dashboard-step-by-step).
-
-## Getting Started
+For a complete tutorial on how to build a real-time dashboard from scratch, read the accompanying Tinybird guide [here](https://www.tinybird.co/docs/guides/tutorials/user-facing-web-analytics).
 
 ### Prerequisites
 
 - Node.js >= v18
 - Python >= v3.8
 
-### Set up your Tinybird account and Workspace
+## Instructions
 
-To build this real-time dashboard, you need a free Tinybird account. You can sign up for your account [here](https://www.tinybird.co/signup?referrer=github&utm_source=github&utm_medium=github&utm_content=real-time-dashboard).
+Follow these instructions to deploy the working version of this application.
 
-Once you've signed up, click this button to deploy a new Workspace to your Tinybird account.
+### 0. Create a free Tinybird Workspace
+
+First, create a [free Tinybird account](https://www.tinybird.co/signup?referrer=github&utm_source=github&utm_medium=github&utm_content=real-time-dashboard). 
 
 [![Deploy to Tinybird](https://cdn.tinybird.co/button)](https://ui.tinybird.co/workspaces/new?name=signatures_dashboard)
 
-### Set up the repository locally
-
-First, clone the repo:
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/tinybirdco/signatures-dashboard.git
 cd signatures-dashboard
 ```
 
-Then, install dependencies:
+### 2. Install dependencies
+
+Install app dependencies and datagen dependencies. From the root of the repo:
 
 ```bash
+cd app
+npm install
+cd ../datagen
 npm install
 ```
 
-### Set up the Tinybird CLI
+### 3. Install the Tinybird CLI
 
-Next, install the Tinybird CLI. This will be needed for local authentication to send mock data to your Tinybird Data Source (or if you'd like to use the CLI to work on your Tinybird resources locally):
+From the root of the repo:
 
 ```bash
-python -mvenv .e
-. .e/bin/activate
+python -m venv .venv
+source .venv/bin/activate
 pip install tinybird-cli
+```
+
+### 4. Authenticate to Tinybird
+
+Copy your User Admin Token from the Tinybird UI. Your user admin token is the token with the format admin <your email address>.
+
+From the root directory, run the following command:
+
+```sh
+export TB_TOKEN=<your user admin token>
 tb auth
 ```
 
-Copy your User Admin token from your workspace (you can find it [here](https://ui.tinybird.co/tokens)) and paste it into the prompt.
+> :warning: Your token and workspace details will be stored in a .tinyb file. If you intend to push this to a public repository, add the `.tinyb` to your `.gitignore`.
 
-Authenticating will create a `.tinyb` file in your project directory.
+### 5. Add your Tinybird host and token to .env
 
-⚠️Warning! The `.tinyb` contains your User Admin token. Don't share it or publish it in your application. For more detailed information on Token management in Tinybird, read [the docs](https://www.tinybird.co/docs/api-reference/token-api.html).
-
-### Create environment variables for local dev
-
-First create a new file `.env.local`
+In the app directory, first create a new file `.env.local`
 ```bash
+cd app
 cp .env.example .env.local
 ```
 
 You need to copy your Tinybird host and token to the `.env.local` file in your directory:
 
 ```bash
-NEXT_PUBLIC_TINYBIRD_HOST=your_tinybird_host # (e.g. api.tinybird.co)
+NEXT_PUBLIC_TINYBIRD_HOST=your_tinybird_host # (e.g. https://api.tinybird.co)
 NEXT_PUBLIC_TINYBIRD_TOKEN=your_tinybird_token
 ```
 
-## Set up data pipelines in Tinybird
+### 6. Push the resources to Tinybird
 
-### Push Data Sources and Pipes to Tinybird server
 
 This repo has two `.datasource` files representing Tinybird [Data Sources](https://www.tinybird.co/docs/concepts/data-sources.html) and four `.pipe` files representing Tinybird [Pipes](https://www.tinybird.co/docs/concepts/pipes.html). The Data Sources will hold data that gets ingested into Tinybird, and the Pipes define the way that data gets transformed and exposed as APIs in real-time. For more information on Data Sources and Pipes, click those links above.
 
 To deploy your real-time data pipelines, push the resources in your repository to the Tinybird server:
 
 ```bash
-tb push data-project/
+tb push tinybird/
 ```
 
-### Stream mock data to Tinybird
+### 7. Stream mock data to Tinybird
 
 This repository includes a data-generating script called `mockDataGenerator.js` that creates mock data and sends it to Tinybird via the [Tinybird Events API](https://www.tinybird.co/docs/ingest/events-api.html).
 
 To send mock data to Tinybird, use the `seed` script:
 
 ```bash
+cd datagen
 npm run seed
 ```
 
 Leave this script running in the background so you can visualize data in real-time.
 
-## Run the dashboard locally
+## 8. Run the dashboard locally
 
 To view the dashboard on your machine, run it locally:
 
@@ -99,33 +111,21 @@ Then open [http://localhost:3000](http://localhost:3000) with your browser to se
 
 The dashboard includes 4 Tremor visual components plus a `DatePicker`. You can add, augment, and adjust to build your own real-time dashboard.
 
-## Why Tinybird?
+## Contributing
 
-Tinybird provides out-of-the-box real-time data infrastructure for your dashboards. With Tinybird you can unify batch and streaming data sources, build real-time data products with SQL, and publish them as APIs.
+If you find any issues or have suggestions for improvements, please submit an issue or a [pull request](https://github.com/tinybirdco/demo-user-facing-analytics-color-picker/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc).
 
-There are a few things that make Tinybird great for building real-time, user-facing dashboards:
+## License
 
-1. **Easy data ingestion**: Tinybird makes it simple to connect streaming and batch data sources through its suite of native connectors. Send data to Tinybird from streaming sources, databases, data warehouses, file systems, or with a simple HTTP request.
+This code is available under the MIT license. See the [LICENSE](https://github.com/tinybirdco/demo-user-facing-analytics-color-picker/blob/main/LICENSE.txt) file for more details.
 
-2. **Low-latency, high-concurrency**: Tinybird is optimized for real-time data. Based on the world's fastest OLAP technology, Tinybird allows you to ingest streaming data at thousands+ events per second and run complex aggregating queries over billions of rows of data in milliseconds.
+## Need help?
 
-3. **SQL-based real-time pipelines**: You can easily design and deploy real-time APIs using [Pipes](https://www.tinybird.co/docs/concepts/pipes.html), a developer-oriented interface for build SQL-based real-time pipelines that can be instantly published as REST APIs.
-
-4. **Scalable architecture**: Tinybird is a scalable, serverless real-time data platform. It flexibly scales storage and compute resources on demand. As your data volume and user load increases, Tinybird responds to ensure fast dashboards at scale.
-
-5. **Excellent compatibility with Next.js and Tremor**: Tinybird's architecture and APIs are designed to work seamlessly with modern frontend frameworks like Next.js. Tinybird's [Vercel Integration](https://www.tinybird.co/docs/guides/integrating-vercel.html) makes it easy to deploy and manage end-to-end data projects quickly.
-
-## Admin stuff
-
-### License
-
-This project is licensed under the MIT License.
-
-### Need help?
-
-&bull; [Community Slack](https://www.tinybird.co/join-our-slack-community) &bull; [Tinybird Docs](https://docs.tinybird.co/) &bull;
+&bull; [Community Slack](https://www.tinybird.co/community) &bull; [Tinybird Docs](https://www.tinybird.co/docs) &bull;
 
 ## Authors
 
 - [Joe Karlsson](https://github.com/joekarlsson)
 - [Cameron Archer](https://github.com/tb-peregrine)
+- [Lucy Mitchell](https://github.com/ioreka)
+- [Julia Vallina](https://github.com/juliavallina)
