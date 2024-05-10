@@ -13,17 +13,14 @@ For a complete tutorial on how to build a real-time dashboard from scratch, read
 
 To build this real-time dashboard, you need a free Tinybird account. You can sign up for your account [here](https://www.tinybird.co/signup?referrer=github&utm_source=github&utm_medium=github&utm_content=real-time-dashboard).
 
-Once you've signed up, click this button to deploy a new Workspace to your Tinybird account.
-
-[![Deploy to Tinybird](https://cdn.tinybird.co/button)](https://ui.tinybird.co/workspaces/new?name=signatures_dashboard)
 
 ### Set up the repository locally
 
 First, clone the repo:
 
 ```bash
-git clone https://github.com/tinybirdco/signatures-dashboard.git
-cd signatures-dashboard
+git clone https://github.com/tinybirdco/demo-user-facing-saas-dashboard-signatures.git
+cd demo-user-facing-saas-dashboard-signatures
 ```
 
 Then, install dependencies:
