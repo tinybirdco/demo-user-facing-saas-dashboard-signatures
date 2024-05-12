@@ -22,8 +22,8 @@ First, create a [free Tinybird account](https://www.tinybird.co/signup?referrer=
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/tinybirdco/signatures-dashboard.git
-cd signatures-dashboard
+git clone https://github.com/tinybirdco/demo-user-facing-saas-dashboard-signatures.git
+cd demo-user-facing-saas-dashboard-signatures
 ```
 
 ### 2. Install dependencies
