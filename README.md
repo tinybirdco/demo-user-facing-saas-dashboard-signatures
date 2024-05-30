@@ -4,15 +4,11 @@ This repository contains code for an example SaaS dashboard project.
 
 If you're building a SaaS product, you'll need to provide users with visibility about their utilisation of the service. This might be showing resource usage, performance metrics, or other data that's relevant to the service you're providing. Whatever the data, users want to see fresh data, not yesterday's, and they don't want to wait for slow metrics and charts. This projects shows how to build a SaaS dashboard that's fast, scalable, and easy to maintain using Tinybird, and how to integrate it with a Next.js frontend.
 
-Read more about this use cases [here](https://www.tinybird.co/docs/use-cases/saas-dashboards).
-
-## Try it live
-
-Try the [live demo](https://saas-dashboard.demos.tinybird.co).
+Read more about [user-facing SaaS dashboards here ](https://www.tinybird.co/docs/use-cases/saas-dashboards](https://www.tinybird.co/docs/use-cases/user-facing-dashboards)).
 
 ## Watch the workshop
 
-Want to watch somebody build this demo live? [Watch the workshop](https://www.tinybird.co/docs/live/saas-dashboards).
+Want to watch somebody build this demo live? [Watch the workshop](https://www.tinybird.co/docs/live/kafka-real-time-dashboard).
 
 ## Deploy it yourself
 
