@@ -3,10 +3,11 @@
 import { BarChart, Card, Subtitle, Text, Title } from "@tremor/react";
 import React from "react";
 import useSWR from "swr";
+import { useFetcher } from "@/hooks/useFetch";
+
 
 // Get your Tinybird host and token from the .env file
 const TINYBIRD_HOST = process.env.NEXT_PUBLIC_TINYBIRD_HOST; // The host URL for the Tinybird API
-const TINYBIRD_TOKEN = process.env.NEXT_PUBLIC_TINYBIRD_TOKEN; // The access token for authentication with the Tinybird API
 
 const REFRESH_INTERVAL_IN_MILLISECONDS = 5000; // five seconds
 
@@ -20,44 +21,34 @@ export default function Dashboard() {
   const dateFromFormatted = dateFrom.toISOString().substring(0, 10);
   const dateToFormatted = dateTo.toISOString().substring(0, 10);
 
+  const fetcher = useFetcher(); // This fetcher handles the token revalidation
+
   // Constructing the URL for fetching data, including host, token, and date range
   const endpointUrl = new URL(
     "/v0/pipes/ranking_of_top_organizations_creating_signatures.json",
     TINYBIRD_HOST
   );
-  endpointUrl.searchParams.set("token", TINYBIRD_TOKEN);
   endpointUrl.searchParams.set("date_from", dateFromFormatted);
   endpointUrl.searchParams.set("date_to", dateToFormatted);
 
   // Initializes variables for storing data
   let ranking_of_top_organizations_creating_signatures, latency, errorMessage;
 
-  try {
-    // Function to fetch data from Tinybird URL and parse JSON response
-    const fetcher = (url) => fetch(url).then((r) => r.json());
+  // Using SWR hook to handle state and refresh result every five seconds
+  const { data } = useSWR(endpointUrl.toString(), fetcher, {
+    refreshInterval: REFRESH_INTERVAL_IN_MILLISECONDS,
+    onError: (error) => (errorMessage = error),
+  });
 
-    // Using SWR hook to handle state and refresh result every five seconds
-    const { data, error } = useSWR(endpointUrl.toString(), fetcher, {
-      refreshInterval: REFRESH_INTERVAL_IN_MILLISECONDS,
-    });
+  if (!data) return;
 
-    if (error) {
-      errorMessage = error;
-      return;
-    }
-    if (!data) return;
-
-    if (data?.error) {
-      errorMessage = data.error;
-      return;
-    }
-
-    ranking_of_top_organizations_creating_signatures = data.data; // Setting the state with the fetched data
-    latency = data.statistics?.elapsed; // Setting the state with the query latency from Tinybird
-  } catch (e) {
-    console.error(e);
-    errorMessage = e;
+  if (data?.error) {
+    errorMessage = data.error;
+    return;
   }
+
+  ranking_of_top_organizations_creating_signatures = data.data; // Setting the state with the fetched data
+  latency = data.statistics?.elapsed; // Setting the state with the query latency from Tinybird
 
   return (
     <Card>
