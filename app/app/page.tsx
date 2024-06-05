@@ -35,7 +35,7 @@ export default function Dashboard() {
   let ranking_of_top_organizations_creating_signatures, latency, errorMessage;
 
   // Using SWR hook to handle state and refresh result every five seconds
-  const { data } = useSWR(endpointUrl, fetcher, {
+  const { data } = useSWR(endpointUrl.toString(), fetcher, {
     refreshInterval: REFRESH_INTERVAL_IN_MILLISECONDS,
     onError: (error) => (errorMessage = error),
   });
